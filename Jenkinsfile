@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ghatak7/aws-cloud-infra-project.git'
+                git branch: 'main', url: 'https://github.com/ghatak7/aws-cloud-infra-project.git'
             }
         }
 
