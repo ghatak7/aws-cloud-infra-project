@@ -15,9 +15,20 @@ pipeline {
 
         stage('Upload to S3') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([usernamePassword(credentialsId: 'aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                         aws s3 cp index.html s3://$S3_BUCKET/index.html
+                    '''
+                }
+            }
+        }
+
+        stage('Upload Build Artifact') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh '''
+                        zip build.zip index.html
+                        aws s3 cp build.zip s3://$S3_BUCKET/builds/
                     '''
                 }
             }
